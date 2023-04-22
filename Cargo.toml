@@ -6,10 +6,17 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-axum = "0.6.16"
+axum = { version = "0.6.16", features = ["tracing"] }
 serde = { version = "1.0.160", features = ["derive"] }
 serde_json = "1.0.96"
 surrealdb = "1.0.0-beta.9"
 tokio = { version = "1.27.0", features = ["full"] }
 tracing = { version = "0.1.37", features = ["log", "attributes"] }
-tracing-subscriber = { version = "0.3.17", features = ["serde", "serde_json", "json"] }
+tracing-subscriber = { version = "0.3.17", features = [
+    "serde",
+    "serde_json",
+    "json",
+    "env-filter",
+] }
+tower-http = { version = "0.4.0", features = ["trace"] }
+hyper = { version = "0.14.26", features = ["full"] }

@@ -1,7 +1,9 @@
+pub mod layer;
+
 use tracing::{error, info, instrument, span, Instrument, Level};
 
 /// https://youtu.be/JjItsfqFIdo
-pub async fn tracing_test() -> Result<(), &'static str> {
+pub async fn logging_example() -> Result<(), &'static str> {
     let yaks: Vec<i32> = vec![1, 2, 3, 4, 8, 9, 10, 14, 22, 31];
 
     let span = span!(Level::INFO, "shaving_yaks", yak_count = yaks.len());
