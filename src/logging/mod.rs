@@ -1,4 +1,4 @@
-use tracing::{error, info, span, Instrument, Level};
+use tracing::{error, info, instrument, span, Instrument, Level};
 
 /// https://youtu.be/JjItsfqFIdo
 pub async fn tracing_test() -> Result<(), &'static str> {
@@ -8,13 +8,15 @@ pub async fn tracing_test() -> Result<(), &'static str> {
     let _enter = span.enter();
 
     for yak in yaks {
-        let span = span!(Level::INFO, "shave", current_yak = yak);
-        tokio::spawn(shave_yak(yak).instrument(span));
+        // attaches span context to a future (includes argument values, etc..)
+        tokio::spawn(shave_yak(yak).instrument(tracing::info_span!("shave_yak")));
     }
     Ok(())
 }
 // should error when arg is multiples of 7
+#[instrument]
 async fn shave_yak(yak_number: i32) -> Result<(), String> {
+    info!("start shaving {}", yak_number);
     let good_yak = yak_number % 7;
     match good_yak != 0 {
         true => {
@@ -22,7 +24,7 @@ async fn shave_yak(yak_number: i32) -> Result<(), String> {
             Ok(())
         }
         false => {
-            error!("shaving failed @number: {}, rest: {}",yak_number, good_yak);
+            error!("shaving failed @number: {}, rest: {}", yak_number, good_yak);
             Err(format!("I don't like this number {}", yak_number))
         }
     }
