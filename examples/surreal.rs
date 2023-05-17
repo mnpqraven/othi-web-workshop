@@ -35,11 +35,6 @@ impl Default for Person {
     }
 }
 
-#[derive(Debug, Serialize)]
-struct Responsibility {
-    marketing: bool,
-}
-
 #[derive(Debug, Deserialize)]
 struct Record {
     #[allow(dead_code)]
@@ -77,7 +72,7 @@ async fn main() -> surrealdb::Result<()> {
     Ok(())
 }
 
-async fn create_person() -> Result<Record, surrealdb::Error> {
+async fn create_person() -> surrealdb::Result<Record> {
     // Create a new person with a random id
     let created: Record = DB
         .create("person")
